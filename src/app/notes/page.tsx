@@ -30,7 +30,7 @@ export default async function NotesPage() {
       <p className="text-sm text-zinc-600">所有已整理的笔记都在这里。</p>
 
       <div className="grid grid-cols-2 gap-3">
-        {notes.map((note) => (
+      {notes.map((note: any) => (
           <article key={note.id} className="rounded-xl border border-zinc-200 p-4">
             <Link href={`/notes/${note.id}`} className="text-sm font-semibold hover:underline">
               {note.title}
