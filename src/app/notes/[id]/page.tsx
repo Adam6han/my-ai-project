@@ -3,6 +3,8 @@ import { NoteDetailEditor } from "@/components/note-detail-editor";
 import { getDefaultUser } from "@/lib/default-user";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 type NoteDetailPageProps = {
   params: Promise<{ id: string }>;
 };

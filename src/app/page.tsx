@@ -2,6 +2,8 @@ import { getDefaultUser } from "@/lib/default-user";
 import { prisma } from "@/lib/prisma";
 import { QuickCapture } from "@/components/quick-capture";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const user = await getDefaultUser();
   const [pendingCount, latestNotes] = await Promise.all([

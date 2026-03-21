@@ -2,6 +2,8 @@ import { InboxList } from "@/components/inbox-list";
 import { getDefaultUser } from "@/lib/default-user";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export default async function InboxPage() {
   const user = await getDefaultUser();
   const items = await prisma.note.findMany({

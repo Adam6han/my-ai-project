@@ -12,6 +12,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id          String      @id @default(uuid())
+  email       String      @unique
+  name        String?
+  locale      String      @default("zh-CN")
+  timezone    String      @default("Asia/Shanghai")
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  notes       Note[]
+  tags        Tag[]
+  paraNodes   ParaNode[]
+  sources     Source[]
+  reviewTasks ReviewTask[]
+}
+
 model Note {
   id             String        @id @default(uuid())
   userId         String

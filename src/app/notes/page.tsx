@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getDefaultUser } from "@/lib/default-user";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export default async function NotesPage() {
   const user = await getDefaultUser();
   const notes = await prisma.note.findMany({
