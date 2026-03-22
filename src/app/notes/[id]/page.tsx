@@ -10,14 +10,29 @@ type NoteDetailPageProps = {
 };
 
 export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
-  const { id } = await params;
-  const user = await getDefaultUser();
-  const note = await prisma.note.findFirst({
-    where: {
-      id,
-      userId: user.id,
-    },
-  });
+  let dbError = false;
+  let note: Awaited<ReturnType<typeof prisma.note.findFirst>> = null;
+
+  try {
+    const { id } = await params;
+    const user = await getDefaultUser();
+    note = await prisma.note.findFirst({
+      where: {
+        id,
+        userId: user.id,
+      },
+    });
+  } catch {
+    dbError = true;
+  }
+
+  if (dbError) {
+    return (
+      <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        笔记详情加载失败：数据库暂时不可用。
+      </div>
+    );
+  }
 
   if (!note) {
     notFound();

@@ -5,24 +5,39 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export default async function NotesPage() {
-  const user = await getDefaultUser();
-  const notes = await prisma.note.findMany({
-    where: {
-      userId: user.id,
-      status: "已处理",
-    },
-    include: {
-      tags: {
-        include: {
-          tag: true,
+  let dbError = false;
+  let notes: Awaited<ReturnType<typeof prisma.note.findMany>> = [];
+
+  try {
+    const user = await getDefaultUser();
+    notes = await prisma.note.findMany({
+      where: {
+        userId: user.id,
+        status: "已处理",
+      },
+      include: {
+        tags: {
+          include: {
+            tag: true,
+          },
         },
       },
-    },
-    orderBy: {
-      updatedAt: "desc",
-    },
-    take: 200,
-  });
+      orderBy: {
+        updatedAt: "desc",
+      },
+      take: 200,
+    });
+  } catch {
+    dbError = true;
+  }
+
+  if (dbError) {
+    return (
+      <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        笔记库加载失败：数据库暂时不可用。
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -30,7 +45,7 @@ export default async function NotesPage() {
       <p className="text-sm text-zinc-600">所有已整理的笔记都在这里。</p>
 
       <div className="grid grid-cols-2 gap-3">
-      {notes.map((note: any) => (
+        {notes.map((note) => (
           <article key={note.id} className="rounded-xl border border-zinc-200 p-4">
             <Link href={`/notes/${note.id}`} className="text-sm font-semibold hover:underline">
               {note.title}
